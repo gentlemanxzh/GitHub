@@ -143,7 +143,7 @@ public final class RxJavaCallAdapterFactory2 extends CallAdapter.Factory {
         throw new IllegalStateException("Result must be parameterized"
             + " as Result<Foo> or Result<? extends Foo>");
       }
-      responseType = getParameterUpperBound(0, (ParameterizedType) observableType);
+       responseType = getParameterUpperBound(0, (ParameterizedType) observableType);
       isResult = true;
     } else if (rawObservableType == GitHubPaging.class) {
       if (!(observableType instanceof ParameterizedType)) {
