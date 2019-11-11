@@ -6,7 +6,7 @@ import android.os.Bundle
 interface ILifecycle {
     fun onCreate(savedInstanceState: Bundle?)
 
-    fun onSaveInstanceState(outState:Bundle)
+    fun onSaveInstanceState(outState: Bundle)
 
     fun onViewStateRestored(savedInstanceState: Bundle?)
 

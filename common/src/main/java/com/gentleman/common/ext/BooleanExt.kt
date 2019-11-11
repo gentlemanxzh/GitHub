@@ -1,4 +1,4 @@
-package com.gentleman.common
+package com.gentleman.common.ext
 
 //密封类,限制在when表达式必须列出该类的所有直接子类,协变
 //因为这里WithData子类是携带状态data的，所以这里使用密封类，如果都是像Otherwise不携带状态的就可以使用枚举

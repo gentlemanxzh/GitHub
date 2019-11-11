@@ -1,6 +1,8 @@
 package com.gentleman.common
 
-import org.junit.Assert
+import com.gentleman.common.ext.no
+import com.gentleman.common.ext.otherwise
+import com.gentleman.common.ext.yes
 import org.junit.Test
 
 
