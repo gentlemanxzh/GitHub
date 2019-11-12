@@ -9,10 +9,13 @@ import cn.carbs.android.avatarimageview.library.AvatarImageView
 import com.bennyhuo.tieguanyin.annotations.Builder
 import com.gentleman.common.ext.no
 import com.gentleman.common.ext.otherwise
+import com.gentleman.common.log.logger
 import com.gentleman.github.model.account.AccountManager
 import com.gentleman.github.model.account.OnAccountStateChangeListener
 import com.gentleman.github.network.entities.User
+import com.gentleman.github.network.services.RepositoryApi
 import com.gentleman.github.utils.doOnLayoutAvailable
+import com.gentleman.github.utils.format
 import com.gentleman.github.utils.loadWithGlide
 import com.gentleman.github.utils.showFragment
 import com.gentleman.github.view.fragments.AboutFragment
@@ -23,9 +26,11 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.sdk15.listeners.onClick
 import org.jetbrains.anko.toast
+import java.text.DateFormat
+import java.util.*
 
 @Builder(flags = [Intent.FLAG_ACTIVITY_CLEAR_TOP])
-class MainActivity : AppCompatActivity(),OnAccountStateChangeListener {
+class MainActivity : AppCompatActivity(), OnAccountStateChangeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +50,15 @@ class MainActivity : AppCompatActivity(),OnAccountStateChangeListener {
 
         AccountManager.onAccountStateChangeListeners.add(this)
 
-        showFragment(R.id.fragmentContainer,AboutFragment::class.java)
+        showFragment(R.id.fragmentContainer, AboutFragment::class.java)
         title = "About"
+
+        RepositoryApi.RepositoryService.allRepositories(2, "pushed:<" + Date().format("yyyy-MM-dd"))
+            .subscribe({
+                logger.debug("Paging:hasNext = ${it.paging.hasNext},hasPrev = ${it.paging.hasPrev}")
+            }, {
+                it.printStackTrace()
+            })
     }
 
     override fun onDestroy() {
@@ -59,7 +71,7 @@ class MainActivity : AppCompatActivity(),OnAccountStateChangeListener {
         initNavigationHeaderEvent()
     }
 
-    private fun initNavigationHeaderEvent(){
+    private fun initNavigationHeaderEvent() {
         navigationView.doOnLayoutAvailable {
             navigationHeader.onClick {
                 AccountManager.isLoggedIn().no {
@@ -68,7 +80,7 @@ class MainActivity : AppCompatActivity(),OnAccountStateChangeListener {
                     AccountManager.logout()
                         .subscribe({
                             toast("注销成功")
-                        },{
+                        }, {
                             it.printStackTrace()
                         })
                 }
@@ -95,17 +107,17 @@ class MainActivity : AppCompatActivity(),OnAccountStateChangeListener {
 
 
     override fun onLogin(user: User) {
-      updateNavigationView(user)
+        updateNavigationView(user)
     }
 
     override fun onLogout() {
-       clearNavigationView()
+        clearNavigationView()
     }
 
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)){
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
-        }else{
+        } else {
             super.onBackPressed()
         }
     }

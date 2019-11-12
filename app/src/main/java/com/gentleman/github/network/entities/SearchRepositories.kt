@@ -15,5 +15,4 @@ data class SearchRepositories(var total_count: Int,
                               var items: List<Repository>) : PagingWrapper<Repository>() {
 
     override fun getElements() = items
-
 }
